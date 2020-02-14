@@ -11,28 +11,17 @@ export default function App() {
     setId(searchValue)
   }
 
-
-
-  if (!idValue) {
-    return (
-      <div>
-        Search:
-        <Search onSearchSubmit={sendData} />
-      </div>
-
-    )
-  }
-  else {
-    return (
-      <>
-      <div>
-        <Video idValue={idValue}/>
-      </div>
-      <div>
-        <Response />
-      </div>
-      </>
-       )
-  }
+  return (
+    <>
+    <div>
+      Search:
+      <Search onSearchSubmit={sendData} />
+    </div>
+    {idValue && <div>
+      <Video idValue={idValue}/>
+      <Response />
+    </div>}
+    </>
+  )
 
    }

@@ -13,6 +13,10 @@ export default function Video({ onPause, idValue }) {
     }, [])
 
     useEffect(() => {
+      if (player.current) {
+        container.current = document.createElement('div')
+        setReady(false)
+      }
       (async () => {
          player.current = await new Player(container.current, {
             id: idValue,
@@ -24,7 +28,7 @@ export default function Video({ onPause, idValue }) {
           })
         setReady(true)
       })()
-    }, [])
+    }, [idValue])
 
     return (
       <div>
