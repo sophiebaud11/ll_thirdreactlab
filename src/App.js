@@ -18,7 +18,7 @@ export default function App() {
       <Search onSearchSubmit={sendData} />
     </div>
     {idValue && <div>
-      <Video idValue={idValue}/>
+      <Video videoID={idValue}/>
       <Response />
     </div>}
     </>
