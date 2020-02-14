@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import Video from './Video'
+import Response from './Response'
+import Panel from './Panel'
+import Search from './Search'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export default function App() {
+  const [idValue, setId] = useState(null)
 
-export default App;
+  async function sendData(searchValue) {
+    setId(searchValue)
+  }
+
+
+
+  if (!idValue) {
+    return (
+      <div>
+        Search:
+        <Search onSearchSubmit={sendData} />
+      </div>
+
+    )
+  }
+  else {
+    return (
+      <>
+      <div>
+        <Video idValue={idValue}/>
+      </div>
+      <div>
+        <Response />
+      </div>
+      </>
+       )
+  }
+
+   }
