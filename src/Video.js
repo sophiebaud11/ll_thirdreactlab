@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Player from '@vimeo/player'
+import Play from './Play.js'
 
-export default function Video({ onPause, idValue }) {
+export default function Video({ onPause, idValue, setTimeStamp }) {
     const container = useRef(document.createElement('div'))
     const player = useRef()
     const [ready, setReady] = useState(false)
@@ -18,7 +19,7 @@ export default function Video({ onPause, idValue }) {
             id: idValue,
             width: '1000px',
             height: '600px',
-            controls: true,
+            controls: false,
             autoplay: false,
             muted: true
           })
@@ -31,6 +32,7 @@ export default function Video({ onPause, idValue }) {
           {ready &&
             <>
             <div ref={videoRef}></div>
+            <Play player={player} setTimeStamp={setTimeStamp}/>
             </>
           }
       </div>

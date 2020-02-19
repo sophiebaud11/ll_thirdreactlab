@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import Panel from './Panel'
+import React, { useState } from 'react'
+import like from './like.png'
 
-export default function Response() {
-  const [likeValue, setLike] = useState(false)
+export default function Response({ setShowForm, addLike }) {
 
-  console.log(likeValue)
   return (
     <>
     <div>
-      <button onClick={() => setLike(true)}><img src="https://www.iconfinder.com/icons/1565103/like_like_button_liked_likes_thumbs_up_icon" /><br />Like!</button>
+      <button onClick={() => setShowForm(true)}>Back</button>
     </div>
     <div>
-    <Panel likeValue={likeValue}/>
+      <button onClick={() => addLike()}><img src={like} width="20px" alt="like"/>Like!</button>
+    </div>
+    <div>
     </div>
     </>
  )
