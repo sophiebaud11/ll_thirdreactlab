@@ -12,7 +12,8 @@ export default function App() {
   const [commentValue, setComment] = useState('')
   const [commentArray, setArray] = useState([])
   const [likeValue, setLike] = useState(0)
-  const [ timeStamp, setTimeStamp ] = useState(0)
+  const [timeStamp, setTimeStamp] = useState(0)
+  const [showCommentForm, setCommentForm] = useState(false)
 
   console.log(timeStamp)
 // add show form state
@@ -23,9 +24,10 @@ export default function App() {
   function addLike() {
     setLike(likeValue + 1)
   }
-  function onCommentSubmit () {
-    setArray([...commentArray, commentValue])
+  function onCommentSubmit (timeStamp) {
+    setArray([...commentArray, commentValue + " (comment made at " + timeStamp +")"])
     setComment('')
+    setCommentForm(false)
   }
 
   if (showForm === true) {
@@ -43,12 +45,12 @@ export default function App() {
       <div style={p1}>
         <div style={p2}>
           <div>
-            <Video idValue={idValue} setTimeStamp={setTimeStamp}/>
+            <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm}/>
           </div>
           <div>
             <Response setShowForm={setShowForm}  addLike={addLike}/>
           </div>
-          {timeStamp && <div><Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/></div>}
+          {timeStamp && showCommentForm && <div><Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/></div>}
         </div>
         <div style={p3}>
           <Panel likeValue={likeValue} commentArray={commentArray}/>

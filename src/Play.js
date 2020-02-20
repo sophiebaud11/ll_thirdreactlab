@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 
 export default function Play (props) {
-  const { player, setTimeStamp } = props
+  const { player, setTimeStamp, setCommentForm } = props
   const [ playing, setPlaying ] = useState(false)
   const buttonText = playing ? 'pause' : 'play'
 
+  function commentButton() {
+    getTimestamp()
+    setCommentForm(true)
+  }
+  
   const playPause = () => {
     switch (playing) {
       case false:
@@ -30,7 +35,7 @@ export default function Play (props) {
       <button onClick={playPause}>{buttonText}</button>
     </div>
     <div>
-      <button onClick={getTimestamp}>Leave a Comment</button>
+      <button onClick={commentButton}>Leave a Comment</button>
     </div>
     </>
 

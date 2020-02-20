@@ -13,7 +13,7 @@ export default function Comment (props) {
         </label>
         <input type="text" value={commentValue}  onChange={e => setComment(e.target.value)}></input>
       </form>
-      <button onClick={() => onCommentSubmit()}>Submit!</button>
+      <button onClick={() => onCommentSubmit(timeStamp)}>Submit!</button>
     </div>
     </>
   )
