@@ -12,14 +12,14 @@ export default function App() {
   const [commentValue, setComment] = useState('')
   const [commentArray, setArray] = useState([])
   const [likeValue, setLike] = useState(0)
-  const [timeStamp, setTimeStamp] = useState(0)
+  const [timeStamp, setTimeStamp] = useState(null)
   const [showCommentForm, setCommentForm] = useState(false)
 
   console.log(timeStamp)
 // add show form state
   function sendData(searchValue) {
     setId(searchValue)
-    setShowForm(false)
+    // setShowForm(false)
   }
   function addLike() {
     setLike(likeValue + 1)
@@ -30,34 +30,29 @@ export default function App() {
     setCommentForm(false)
   }
 
-  if (showForm === true) {
-    return (
-      <div>
-        Search:
-        <Search onSearchSubmit={sendData} />
-      </div>
-
-    )
-  }
-  else {
-    return (
-      <>
+  return (
+    <>
       <div style={p1}>
         <div style={p2}>
-          <div>
-            <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm}/>
-          </div>
-          <div>
-            <Response setShowForm={setShowForm}  addLike={addLike}/>
-          </div>
-          {timeStamp && showCommentForm && <div><Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/></div>}
-        </div>
-        <div style={p3}>
-          <Panel likeValue={likeValue} commentArray={commentArray}/>
-        </div>
+        Search:
+        <Search sendData={sendData} />
+      {idValue &&
+        <>
+          <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm}/>
+          <Response setShowForm={setShowForm}  addLike={addLike}/>
+        </>
+      }
+      {(timeStamp && showCommentForm) &&
+        <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
+      }
       </div>
-      </>
-       )
-  }
+      <div style={p3}>
+      {idValue &&
+        <Panel likeValue={likeValue} commentArray={commentArray}/>
+      }
+      </div>
+    </div>
 
-   }
+    </>
+    )
+  }

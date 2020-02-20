@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
+import { buttonStyle } from './styles.js'
 
 export default function Play (props) {
   const { player, setTimeStamp, setCommentForm } = props
   const [ playing, setPlaying ] = useState(false)
-  const buttonText = playing ? 'pause' : 'play'
+  const buttonText = playing ? 'Pause' : 'Play'
 
   function commentButton() {
     getTimestamp()
     setCommentForm(true)
   }
-  
+
   const playPause = () => {
     switch (playing) {
       case false:
@@ -32,10 +33,10 @@ export default function Play (props) {
   return (
     <>
     <div>
-      <button onClick={playPause}>{buttonText}</button>
+      <button style={buttonStyle} onClick={playPause}>{buttonText}</button>
     </div>
     <div>
-      <button onClick={commentButton}>Leave a Comment</button>
+      <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
     </div>
     </>
 
