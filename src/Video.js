@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Player from '@vimeo/player'
 import Play from './Play.js'
+import { videoStyle } from './styles.js'
 
-export default function Video({ onPause, idValue, setTimeStamp, setCommentForm }) {
+export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, addLike }) {
     const container = useRef(document.createElement('div'))
     const player = useRef()
     const [ready, setReady] = useState(false)
@@ -14,25 +15,28 @@ export default function Video({ onPause, idValue, setTimeStamp, setCommentForm }
     }, [])
 
     useEffect(() => {
+      if (idValue) {
+        container.current = document.createElement('div')
+        setReady(false)
+      }
       (async () => {
          player.current = await new Player(container.current, {
             id: idValue,
             width: '500px',
-            height: '300px',
             controls: false,
-            autoplay: false,
+            autoplay: true,
             muted: true
           })
         setReady(true)
       })()
-    }, [])
+    }, [idValue])
 
     return (
       <div>
           {ready &&
             <>
-            <div ref={videoRef}></div>
-            <Play player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm}/>
+            <div style={videoStyle} ref={videoRef}></div>
+            <Play player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike}/>
             </>
           }
       </div>

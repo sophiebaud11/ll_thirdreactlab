@@ -10,9 +10,8 @@ export default function Panel({ likeValue, commentArray }) {
   return (
     <>
     <div style = {panelStyle}>
-      <h2>Likes:</h2>
-      <p>{likeValue}</p>
-      <h2>Comments: </h2>
+      <span style={{fontSize: "1.17em", }}><bold>Likes:</bold> {likeValue}</span>
+      <h3>Comments: </h3>
       <p style={commentStyle}>{commentsList}</p>
     </div>
     </>

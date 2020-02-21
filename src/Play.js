@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { buttonStyle } from './styles.js'
+import like from './like.png'
+import { buttonStyle, p4 } from './styles.js'
 
 export default function Play (props) {
-  const { player, setTimeStamp, setCommentForm } = props
-  const [ playing, setPlaying ] = useState(false)
+  const { player, setTimeStamp, setCommentForm, addLike } = props
+  const [ playing, setPlaying ] = useState(true)
   const buttonText = playing ? 'Pause' : 'Play'
 
   function commentButton() {
@@ -32,12 +33,11 @@ export default function Play (props) {
   }
   return (
     <>
-    <div>
-      <button style={buttonStyle} onClick={playPause}>{buttonText}</button>
-    </div>
-    <div>
-      <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
-    </div>
+      <div style={p4}>
+        <button style={buttonStyle} onClick={playPause}>{buttonText}</button>
+        <button style={buttonStyle} onClick={() => addLike()}><img src={like} width="20px" alt="like"/>Like!</button>
+        <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
+      </div>
     </>
 
   )

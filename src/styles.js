@@ -2,20 +2,32 @@
 export const p1 = {
   display: "flex",
   flexDirection: "row",
-  justifyContent: "spaceBetween",
+  justifyContent: "left",
   fontFamily: "'Roboto Slab', serif",
 }
 export const p2 = {
   display: "flex",
   flexDirection: "column",
-  justifyContent: "spaceBetween",
+  justifyContent: "left",
   fontFamily: "'Roboto Slab', serif",
 
+}
+export const r2 = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "left",
+  fontFamily: "'Roboto Slab', serif",
 }
 export const p3 = {
   display: "flex",
   flexDirection: "column",
-  justifyContent: "spaceBetween",
+  justifyContent: "start",
+  fontFamily: "'Roboto Slab', serif",
+}
+export const p4 = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
   fontFamily: "'Roboto Slab', serif",
 }
 
@@ -32,6 +44,9 @@ export const inputStyle = {
   fontFamily: "'Roboto Slab', serif"
 }
 export const panelStyle = {
-  marginTop: "20px",
-  marginLeft: "10px"
+  marginLeft: "10px",
+  marginTop: "1em"
+}
+export const videoStyle = {
+  marginTop: "20px"
 }
