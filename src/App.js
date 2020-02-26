@@ -36,7 +36,7 @@ export default function App() {
       </div>
       <div style={r2}>
         <div style={p2}>
-        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike}/>
+        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray}/>
           <div style={p4}>
             {(timeStamp && showCommentForm) &&
               <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
