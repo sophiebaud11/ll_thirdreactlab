@@ -3,7 +3,7 @@ import like from './likeshadow.png'
 import { buttonStyle, p4 } from './styles.js'
 
 export default function Play (props) {
-  const { player, setTimeStamp, setCommentForm, addLike, commentArray } = props
+  const { player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll } = props
   const [ playing, setPlaying ] = useState(true)
   const buttonText = playing ? 'Pause' : 'Play'
 
@@ -12,10 +12,17 @@ export default function Play (props) {
     setCommentForm(true)
   }
   function saveComment() {
+    setCommentRoll([...rollComments, commentArray])
+    console.log(rollComments)
 // save comment array to a new state variable - log that new state variable to see if how it's structured
 // have a roll past comments button that rolls thru that data as the video plays, showing comments in sync
   }
-
+  function showRoll() {
+    setShowRoll(true)
+  }
+  function hideRoll() {
+    setShowRoll(false)
+  }
   const playPause = () => {
     switch (playing) {
       case false:
@@ -42,6 +49,8 @@ export default function Play (props) {
         <button style={buttonStyle} onClick={() => addLike()}><img src={like} width="20px" alt="like"/>Like!</button>
         <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
         <button style={buttonStyle} onClick={saveComment}>Save Comments</button>
+        <button style={buttonStyle} onClick={showRoll}>Show Saved Comments</button>
+        <button style={buttonStyle} onClick={hideRoll}>Hide Saved Comments</button>
       </div>
     </>
 

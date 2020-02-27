@@ -18,6 +18,13 @@ export const r2 = {
   justifyContent: "left",
   fontFamily: "'Roboto Slab', serif",
 }
+export const r3 = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "left",
+  fontFamily: "'Roboto Slab', serif",
+}
+
 export const p3 = {
   display: "flex",
   flexDirection: "column",

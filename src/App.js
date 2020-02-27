@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Video from './Video'
 import Search from './Search'
+import Roll from './Roll'
 import Panel from './Panel'
 import Comment from './Comment.js'
-import { p1, p2, p3, p4, r2 } from './styles.js'
+import { p1, p2, p3, p4, r2, r3 } from './styles.js'
 
 export default function App() {
   const [idValue, setId] = useState(null)
@@ -12,6 +13,8 @@ export default function App() {
   const [likeValue, setLike] = useState(0)
   const [timeStamp, setTimeStamp] = useState(null)
   const [showCommentForm, setCommentForm] = useState(false)
+  const [rollComments, setCommentRoll] = useState([])
+  const [showRollComments, setShowRoll] = useState(false)
 
   function newVideo(searchValue) {
     setId(searchValue)
@@ -23,7 +26,8 @@ export default function App() {
     setLike(likeValue + 1)
   }
   function onCommentSubmit (timeStamp) {
-    setArray([...commentArray, commentValue + " (comment made at " + timeStamp +")"])
+    setArray([...commentArray, {time: timeStamp, text: commentValue}])
+    // setArray([...commentArray, commentValue + " (comment made at " + timeStamp +")", timeStamp])
     setComment('')
     setCommentForm(false)
   }
@@ -36,7 +40,7 @@ export default function App() {
       </div>
       <div style={r2}>
         <div style={p2}>
-        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray}/>
+        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} />
           <div style={p4}>
             {(timeStamp && showCommentForm) &&
               <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
@@ -46,6 +50,11 @@ export default function App() {
         <div style={p3}>
           <Panel likeValue={likeValue} commentArray={commentArray}/>
         </div>
+      </div>
+      <div style={r3}>
+        {(showRollComments) &&
+        <Roll setCommentRoll={setCommentRoll} rollComments={rollComments} />
+        }
       </div>
       </>
     )
