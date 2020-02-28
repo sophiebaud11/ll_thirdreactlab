@@ -4,7 +4,7 @@ import { commentStyle, panelStyle, titleStyle } from './styles.js'
 export default function Panel({ likeValue, commentArray }) {
 
   const commentsList = commentArray ? <div>
-    {commentArray.map((item,i) => <p style={{marginTop: "3px"}} key={i}>{commentArray[i].text + "(comment made at" + commentArray[i].time + ")"}</p>)}
+    {commentArray.map((item,i) => <p style={{marginTop: "3px"}} key={i}>{commentArray[i].text + " (comment made at " + commentArray[i].time + ")"}</p>)}
   </div> : <p>No comments yet!</p>
 
   return (

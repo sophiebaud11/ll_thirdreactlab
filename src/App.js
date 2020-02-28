@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Video from './Video'
 import Search from './Search'
+import Stopwatch from './Stopwatch.js'
 import Roll from './Roll'
 import Panel from './Panel'
 import Comment from './Comment.js'
@@ -15,6 +16,7 @@ export default function App() {
   const [showCommentForm, setCommentForm] = useState(false)
   const [rollComments, setCommentRoll] = useState([])
   const [showRollComments, setShowRoll] = useState(false)
+  const [playing, setPlaying] = useState(true)
 
   function newVideo(searchValue) {
     setId(searchValue)
@@ -40,7 +42,7 @@ export default function App() {
       </div>
       <div style={r2}>
         <div style={p2}>
-        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} />
+        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} playing={playing} setPlaying={setPlaying} />
           <div style={p4}>
             {(timeStamp && showCommentForm) &&
               <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
@@ -55,6 +57,9 @@ export default function App() {
         {(showRollComments) &&
         <Roll setCommentRoll={setCommentRoll} rollComments={rollComments} />
         }
+        {(showRollComments &&
+          <Stopwatch playing={playing} setPlaying={setPlaying} />
+        )}
       </div>
       </>
     )

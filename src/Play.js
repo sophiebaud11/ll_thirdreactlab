@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import like from './likeshadow.png'
+import Player from '@vimeo/player'
+import commentData from './dataModel.js'
 import { buttonStyle, p4 } from './styles.js'
 
 export default function Play (props) {
-  const { player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll } = props
-  const [ playing, setPlaying ] = useState(true)
+  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll } = props
   const buttonText = playing ? 'Pause' : 'Play'
 
   function commentButton() {
@@ -12,13 +13,31 @@ export default function Play (props) {
     setCommentForm(true)
   }
   function saveComment() {
-    setCommentRoll([...rollComments, commentArray])
-    console.log(rollComments)
+      setCommentRoll(commentArray)
 // save comment array to a new state variable - log that new state variable to see if how it's structured
 // have a roll past comments button that rolls thru that data as the video plays, showing comments in sync
   }
   function showRoll() {
     setShowRoll(true)
+    console.log(rollComments)
+    for (var i = 0; i < commentArray.length; i++) {
+      commentData[rollComments[i].time] = rollComments[i].text
+    }
+    console.log(commentData)
+    player.current.setCurrentTime(0).then(function(seconds) {
+      player.current.play()
+    }).catch(function(error) {
+        switch (error.name) {
+          case 'RangeError':
+              // The time is less than 0 or greater than the video's duration
+              break;
+
+          default:
+              // Some other error occurred
+              break;
+        }
+      })
+
   }
   function hideRoll() {
     setShowRoll(false)
