@@ -17,6 +17,7 @@ export default function App() {
   const [rollComments, setCommentRoll] = useState([])
   const [showRollComments, setShowRoll] = useState(false)
   const [playing, setPlaying] = useState(true)
+  const [videoDuration, setDuration] = useState(0)
 
   function newVideo(searchValue) {
     setId(searchValue)
@@ -33,7 +34,6 @@ export default function App() {
     setComment('')
     setCommentForm(false)
   }
-
   if (idValue) {
     return (
       <>
@@ -42,7 +42,7 @@ export default function App() {
       </div>
       <div style={r2}>
         <div style={p2}>
-        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} playing={playing} setPlaying={setPlaying} />
+        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} playing={playing} setPlaying={setPlaying} setDuration={setDuration} />
           <div style={p4}>
             {(timeStamp && showCommentForm) &&
               <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
@@ -53,14 +53,11 @@ export default function App() {
           <Panel likeValue={likeValue} commentArray={commentArray}/>
         </div>
       </div>
-      <div style={r3}>
-        {(showRollComments) &&
-        <Roll setCommentRoll={setCommentRoll} rollComments={rollComments} />
-        }
-        {(showRollComments &&
-          <Stopwatch playing={playing} setPlaying={setPlaying} />
-        )}
-      </div>
+      {(showRollComments) &&
+        <div style={r3}>
+            <Stopwatch playing={playing} setPlaying={setPlaying} videoDuration={videoDuration} />
+        </div>
+    }
       </>
     )
   }

@@ -3,7 +3,7 @@ import Player from '@vimeo/player'
 import Play from './Play.js'
 import { videoStyle } from './styles.js'
 
-export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll, playing, setPlaying }) {
+export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll, playing, setPlaying, setDuration }) {
     const container = useRef(document.createElement('div'))
     const player = useRef()
     const [ready, setReady] = useState(false)
@@ -36,7 +36,7 @@ export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, 
           {ready &&
             <>
             <div style={videoStyle} ref={videoRef}></div>
-            <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} />
+            <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} setDuration={setDuration} />
             </>
           }
       </div>

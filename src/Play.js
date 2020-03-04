@@ -5,7 +5,7 @@ import commentData from './dataModel.js'
 import { buttonStyle, p4 } from './styles.js'
 
 export default function Play (props) {
-  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll } = props
+  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll, setDuration } = props
   const buttonText = playing ? 'Pause' : 'Play'
 
   function commentButton() {
@@ -13,12 +13,17 @@ export default function Play (props) {
     setCommentForm(true)
   }
   function saveComment() {
-      setCommentRoll(commentArray)
+    setCommentRoll(commentArray)
 // save comment array to a new state variable - log that new state variable to see if how it's structured
 // have a roll past comments button that rolls thru that data as the video plays, showing comments in sync
   }
   function showRoll() {
+    player.current.getDuration().then(function(duration){
+      console.log(duration)
+      setDuration(duration)
+    })
     setShowRoll(true)
+    setPlaying(true)
     console.log(rollComments)
     for (var i = 0; i < commentArray.length; i++) {
       commentData[rollComments[i].time] = rollComments[i].text
