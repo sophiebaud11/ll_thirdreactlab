@@ -5,7 +5,9 @@ import Roll from './Roll'
 
 export default function Stopwatch({ playing, videoDuration }) {
   const [matchComments, setMatch] = useState([])
-// keep checking on tihs logic, see if you can get to the point where you remove the buttons
+
+// have it start when playing starts !!!
+
   console.log(videoDuration)
   console.log(matchComments)
   var seconds = 0
@@ -15,7 +17,7 @@ export default function Stopwatch({ playing, videoDuration }) {
       console.log(seconds)
       for (const comment in commentData) {
         if (seconds === Math.round(comment)) {
-          setMatch([...matchComments, {time: comment, text: commentData[comment]}])
+          setMatch(matchComments => [...matchComments, {time: comment, text: commentData[comment]}])
         }
       }
       if (seconds === Math.round(videoDuration)) {
@@ -27,15 +29,11 @@ export default function Stopwatch({ playing, videoDuration }) {
   function startStopwatch() {
     stopwatchInterval = setInterval(checkSeconds, 1000)
   }
-  function stopStopwatch() {
-    clearInterval(stopwatchInterval)
-  }
 
   return(
     <>
     <Roll matchComments={matchComments} />
     <button onClick={startStopwatch}>start</button>
-    <button onClick={stopStopwatch}>stop</button>
     </>
   )
 }
