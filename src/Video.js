@@ -22,7 +22,7 @@ export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, 
       (async () => {
          player.current = await new Player(container.current, {
             id: idValue,
-            width: '500px',
+            maxWidth: '1000px',
             controls: false,
             autoplay: true,
             muted: true
