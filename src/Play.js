@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import like from './likeshadow.png'
 import Player from '@vimeo/player'
 import Roll from './Roll.js'
@@ -11,6 +11,13 @@ export default function Play (props) {
   const [matchComments, setMatch] = useState([])
   const [videoDuration, setDuration] = useState(0)
   const [mode, setMode] = useState("")
+  const [currentTime, setCurrentTime] = useState(0)
+
+  const getTimestamp = () => {
+    player.current.getCurrentTime().then(function(seconds) {
+      setTimeStamp(seconds)
+    })
+  }
 
   var stopwatchInterval
   function commentButton() {
@@ -20,42 +27,43 @@ export default function Play (props) {
   function saveComment() {
     setCommentRoll(commentArray)
   }
-// put stopwatch interval into a useeffect tripped by mode 
-
-
-  function showRoll(type) {
-    player.current.getDuration().then(function(duration){
-      setDuration(duration)
-    })
-    for (var i = 0; i < commentArray.length; i++) {
-      commentData[rollComments[i].time] = rollComments[i].text
+  useEffect(() => {
+    const timer = setInterval(() => {
+      player.current.getCurrentTime().then( secs => setCurrentTime(secs))
+    }, 200)
+    if (!playing) {
+      clearInterval(timer)
     }
-    var stopwatchSeconds = 0
-    console.log(playing)
-    stopwatchInterval = setInterval(() => {
-        if (playing) {
-          stopwatchSeconds++
-          console.log(stopwatchSeconds)
-          for (const comment in commentData) {
-            console.log(comment)
-            if (stopwatchSeconds === Math.round(comment)) {
-              setMatch(matchComments => [...matchComments, {time: comment, text: commentData[comment]}])
-            }
-          }
-          if (stopwatchSeconds === Math.round(videoDuration)) {
-            clearInterval(stopwatchInterval)
-            return
-          }
-        }
-      }, 1000)
-  function showSaved () {
-    setMode("showComments")
-    console.log("showing saved")
-    player.current.setCurrentTime(0).then(function(seconds) {
-      player.current.play()
-    })
-    showRoll(playing)
-  }
+    return () => clearInterval(timer)
+  }, [currentTime, player, playing])
+
+
+// put stopwatch interval into a useeffect tripped by mode
+
+  //
+  // function showRoll(type) {
+  //   player.current.getDuration().then(function(duration){
+  //     setDuration(duration)
+  //   })
+  //
+  //   var stopwatchSeconds = 0
+  //   console.log(playing)
+  //   stopwatchInterval = setInterval(() => {
+  //       if (playing) {
+  //         stopwatchSeconds++
+  //         console.log(stopwatchSeconds)
+  //         for (const comment in commentData) {
+  //           console.log(comment)
+  //           if (stopwatchSeconds === Math.round(comment)) {
+  //             setMatch(matchComments => [...matchComments, {time: comment, text: commentData[comment]}])
+  //           }
+  //         }
+  //         if (stopwatchSeconds === Math.round(videoDuration)) {
+  //           clearInterval(stopwatchInterval)
+  //           return
+  //         }
+  //       }
+  //     }, 1000)
 
   const playPause = (mode) => {
     if (mode === "showComments") {
@@ -68,7 +76,6 @@ export default function Play (props) {
         case true:
           player.current.pause()
           setPlaying(false)
-          showRoll("clear")
           break
         default:
           break
@@ -91,11 +98,6 @@ export default function Play (props) {
       }
     }
   }
-  const getTimestamp = () => {
-    player.current.getCurrentTime().then(function(seconds) {
-      setTimeStamp(seconds)
-    })
-  }
   return (
     <>
       <div style={p4}>
@@ -103,10 +105,9 @@ export default function Play (props) {
         <button style={buttonStyle} onClick={() => addLike()}><img src={like} width="20px" alt="like"/>Like!</button>
         <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
         <button style={buttonStyle} onClick={saveComment}>Save Comments</button>
-        <button style={buttonStyle} onClick={showSaved}>Show Saved Comments</button>
       </div>
       <div style={r3}>
-        <Roll matchComments={matchComments} />
+        <Roll matchComments={matchComments} currentTime={currentTime} playing={playing} player={player} setMode={setMode} setMatch={setMatch} commentArray={commentArray} rollComments={rollComments} />
       </div>
     </>
 
