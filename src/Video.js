@@ -1,18 +1,25 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Player from '@vimeo/player'
 import Play from './Play.js'
-import { videoStyle } from './styles.js'
+import { videoStyle, videoTitle, titleStyle } from './styles.js'
 
-export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll, playing, setPlaying, setDuration }) {
+export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll, player, playing, setPlaying, setDuration }) {
     const container = useRef(document.createElement('div'))
-    const player = useRef()
     const [ready, setReady] = useState(false)
+    const [theTitle, setTitle] = useState("")
 
     const videoRef = useCallback(node => {
       if (node !== null) {
         node.appendChild(container.current)
       }
     }, [])
+
+    function getTitle() {
+      player.current.getVideoTitle().then(function(title) {
+        console.log(title)
+        setTitle(title)
+      }
+    )}
 
     useEffect(() => {
       if (idValue) {
@@ -28,15 +35,17 @@ export default function Video({ onPause, idValue, setTimeStamp, setCommentForm, 
             muted: true
           })
         setReady(true)
+        getTitle()
       })()
     }, [idValue])
+
 
     return (
       <div>
           {ready &&
             <>
             <div style={videoStyle} ref={videoRef}></div>
-            <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setShowRoll={setShowRoll} setDuration={setDuration} />
+            <p style={videoTitle}>{theTitle}</p>
             </>
           }
       </div>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Video from './Video'
+import Play from './Play'
 import Search from './Search'
 import Roll from './Roll'
 import Panel from './Panel'
@@ -15,6 +16,11 @@ export default function App() {
   const [showCommentForm, setCommentForm] = useState(false)
   const [rollComments, setCommentRoll] = useState([])
   const [playing, setPlaying] = useState(true)
+  const player = useRef()
+  const [matchComments, setMatch] = useState([])
+  const [mode, setMode] = useState("initial")
+  const [currentTime, setCurrentTime] = useState(0)
+
 
   function newVideo(searchValue) {
     setId(searchValue)
@@ -39,15 +45,17 @@ export default function App() {
       </div>
       <div style={r2}>
         <div style={p2}>
-        <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} playing={playing} setPlaying={setPlaying} />
-          <div style={p4}>
-            {(timeStamp && showCommentForm) &&
-              <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
-            }
-          </div>
+        <Video player={player} idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} playing={playing} setPlaying={setPlaying} />
+        <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setCurrentTime={setCurrentTime} currentTime={currentTime} mode={mode} />
+        <div style={p4}>
+          {(timeStamp && showCommentForm) &&
+            <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
+          }
+        </div>
+        <Panel likeValue={likeValue} commentArray={commentArray}/>
         </div>
         <div style={p3}>
-          <Panel likeValue={likeValue} commentArray={commentArray}/>
+          <Roll matchComments={matchComments} currentTime={currentTime} playing={playing} player={player} setMode={setMode} setMatch={setMatch} commentArray={commentArray} rollComments={rollComments} mode={mode} />
         </div>
       </div>
     </>
@@ -61,31 +69,3 @@ export default function App() {
     )
   }
 }
-
-  // return (
-  //   <>
-  //     <div style={p1}>
-  //       <div style={p2}>
-  //       Search:
-  //       <Search newVideo={newVideo} />
-  //     {idValue &&
-  //       <>
-  //         <Video idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm}/>
-  //
-  //         <Response addLike={addLike}/>
-  //       </>
-  //     }
-  //     {(timeStamp && showCommentForm) &&
-  //       <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
-  //     }
-  //     </div>
-  //     <div style={p3}>
-  //     {idValue &&
-  //       <Panel likeValue={likeValue} commentArray={commentArray}/>
-  //     }
-  //     </div>
-  //   </div>
-  //
-  //   </>
-  //   )
-  // }

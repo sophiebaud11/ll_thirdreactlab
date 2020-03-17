@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { buttonStyle } from './styles.js'
+import { buttonStyle, commentStyle, titleStyle, showButton } from './styles.js'
 import commentData from './dataModel.js'
 
-export default function Roll({ matchComments, currentTime, playing, player, setMode, setMatch, commentArray, rollComments }) {
+export default function Roll({ matchComments, currentTime, playing, player, setMode, setMatch, commentArray, rollComments, mode }) {
   //query getcurrenttime to check if things match
   useEffect(() => {
     for (const comment in commentData) {
-      console.log(comment)
       if (currentTime + .1 >= comment && currentTime - .1 <= comment) {
         if (matchComments.length > 0) {
           console.log("first if")
@@ -25,12 +24,10 @@ export default function Roll({ matchComments, currentTime, playing, player, setM
     for (var i = 0; i < commentArray.length; i++) {
         commentData[rollComments[i].time] = rollComments[i].text
       }
-    console.log(commentData)
   }
   function showSaved () {
     setMode("showComments")
     console.log("showing saved")
-    console.log(currentTime)
     player.current.setCurrentTime(0).then(function(seconds) {
       player.current.play()
     })
@@ -42,12 +39,17 @@ export default function Roll({ matchComments, currentTime, playing, player, setM
 
     return (
       <div>
-        <p>{currentTime}</p>
-        <button style={buttonStyle} onClick={showSaved}>Show Saved Comments</button>
-        Comments:
-          { matchComments &&
+        <div style={showButton}>
+          <button style={buttonStyle} onClick={showSaved}>Show Saved Comments</button>
+        </div>
+          { mode === "showComments" && matchComments &&
             <>
-            {items}
+            <div style={titleStyle}>
+              Comments:
+            </div>
+            <div style={commentStyle}>
+              {items}
+            </div>
             </>
           }
       </div>
