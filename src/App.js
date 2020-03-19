@@ -1,11 +1,13 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Video from './Video'
 import Play from './Play'
 import Search from './Search'
 import Roll from './Roll'
 import Panel from './Panel'
 import Comment from './Comment.js'
-import { p1, p2, p3, p4, r2, r3 } from './styles.js'
+import * as FirestoreService from './Firebase.js'
+
+import { p1, p2, p3, p4, r2 } from './styles.js'
 
 export default function App() {
   const [idValue, setId] = useState(null)
@@ -20,6 +22,19 @@ export default function App() {
   const [matchComments, setMatch] = useState([])
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
+  const [collectionId, setCollectionId] = useState("")
+  const [error, setError] = useState();
+
+
+  useEffect(() => {
+    FirestoreService.authenticateAnonymously().then(userCredential => {
+      setCollectionId("8KsivCkLneKoUOslMaZb")
+      if (collectionId) {
+        console.log("hi")
+      }
+    })
+    .catch(() => setError('anonymous-auth-failed'));
+  }, [collectionId, setCollectionId]);
 
 
   function newVideo(searchValue) {
