@@ -4,8 +4,8 @@ import Play from './Play'
 import Search from './Search'
 import Roll from './Roll'
 import Panel from './Panel'
+import Firebase from 'firebase'
 import Comment from './Comment.js'
-import * as FirestoreService from './Firebase.js'
 
 import { p1, p2, p3, p4, r2 } from './styles.js'
 
@@ -23,18 +23,44 @@ export default function App() {
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
   const [collectionId, setCollectionId] = useState("")
-  const [error, setError] = useState();
+  const [error, setError] = useState()
+  const indexToUpdate = useRef(null)
 
 
-  useEffect(() => {
-    FirestoreService.authenticateAnonymously().then(userCredential => {
-      setCollectionId("8KsivCkLneKoUOslMaZb")
-      if (collectionId) {
-        console.log("hi")
+  const config = {
+    apiKey: "AIzaSyDcHFo130e0QqbOEa6wgcZwws858Xe326c",
+    authDomain: "ll-thirdreactlab.firebaseapp.com",
+    databaseURL: "https://ll-thirdreactlab.firebaseio.com",
+    projectId: "ll-thirdreactlab",
+    storageBucket: "ll-thirdreactlab.appspot.com",
+    messagingSenderId: "465521793807",
+    appId: "1:465521793807:web:74a2ed70d2b5a614fb3c7a"
+  }
+  const getUserData = () => {
+    let ref = Firebase.database().ref('/')
+    ref.on('value', snapshot => {
+      const dbState = snapshot.val()
+      console.log(`db snap: ${dbState}`)
+      if (dbState) {
+        setArray(dbState)
       }
     })
-    .catch(() => setError('anonymous-auth-failed'));
-  }, [collectionId, setCollectionId]);
+  }
+  useEffect(() => {
+      Firebase.initializeApp(config)
+      getUserData()
+    }, [])
+
+  useEffect(() => {
+    console.log(commentArray)
+    const writeUserData = () => {
+      Firebase.database().ref('/').set(commentArray)
+      console.log('DATA SAVED')
+    }
+    if (commentArray.length > 0) {
+      writeUserData()
+    }
+  }, [commentArray])
 
 
   function newVideo(searchValue) {
@@ -47,11 +73,14 @@ export default function App() {
     setLike(likeValue + 1)
   }
   function onCommentSubmit (timeStamp) {
-    setArray([...commentArray, {time: timeStamp, text: commentValue}])
-    // setArray([...commentArray, commentValue + " (comment made at " + timeStamp +")", timeStamp])
+    const time = timeStamp
+    const text = commentValue
+    const uid = new Date().getTime().toString()
+    setArray([...commentArray, { time: time, text: text, uid: uid }])
     setComment('')
     setCommentForm(false)
   }
+
   if (idValue) {
     return (
       <>
