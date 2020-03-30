@@ -6,7 +6,7 @@ import commentData from './dataModel.js'
 import { buttonStyle, p4, r3 } from './styles.js'
 
 export default function Play (props) {
-  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setCurrentTime, currentTime, mode } = props
+  const { playing, setPlaying, player, setSaved, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setCurrentTime, currentTime, mode } = props
   const buttonText = playing ? 'Pause' : 'Play'
   const [videoDuration, setDuration] = useState(0)
 
@@ -23,6 +23,7 @@ export default function Play (props) {
   }
   function saveComment() {
     setCommentRoll(commentArray)
+    setSaved(true)
   }
   useEffect(() => {
     const timer = setInterval(() => {

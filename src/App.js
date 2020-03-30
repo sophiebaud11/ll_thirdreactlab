@@ -23,14 +23,17 @@ export default function App() {
   const [matchComments, setMatch] = useState([])
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
+  const [saved, setSaved] = useState(false)
+  const sessionId = useRef()
+  const [data, setData] = useState([])
 
   const getUserData = () => {
     let ref = Firebase.database().ref('/')
     ref.on('value', snapshot => {
       const dbState = snapshot.val()
-      console.log(`db snap: ${dbState}`)
+      console.log('db snap:', {dbState})
       if (dbState) {
-        setArray(dbState)
+        setData(dbState)
       }
     })
     console.log('DATA RETRIEVED')
@@ -42,20 +45,30 @@ export default function App() {
 
   useEffect(() => {
     console.log(commentArray)
+    console.log(sessionId)
+
     const writeUserData = () => {
+      if (sessionId.current !== null) {
+        let update = {[sessionId.current]: {
+          videoId: idValue,
+          comments: commentArray
+        }}
+        setData(update)
+      }
       // make a new variable - stick comment array into an object and send that object to the db
       // the key of this object is the numeric date, then video id, then comment data
-      Firebase.database().ref('/').set(commentArray)
+      Firebase.database().ref('/').set(data)
       console.log('DATA SAVED')
     }
-    if (commentArray.length > 0) {
+    if (saved) {
       writeUserData()
     }
-  }, [commentArray])
+  }, [saved, commentArray, idValue, sessionId])
 
 
   function newVideo(searchValue) {
     setId(searchValue)
+    sessionId.current = new Date().toString()
     setComment('')
     setArray([])
     setLike(0)
@@ -68,8 +81,10 @@ export default function App() {
     const text = commentValue
     const uid = new Date().getTime().toString()
     setArray([...commentArray, { time: time, text: text, uid: uid }])
+    console.log("comment submitted")
     setComment('')
     setCommentForm(false)
+    setSaved(false)
   }
 
   if (idValue) {
@@ -81,7 +96,7 @@ export default function App() {
       <div style={r2}>
         <div style={p2}>
         <Video player={player} idValue={idValue} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} playing={playing} setPlaying={setPlaying} />
-        <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setCurrentTime={setCurrentTime} currentTime={currentTime} mode={mode} />
+        <Play playing={playing} setSaved={setSaved} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setCurrentTime={setCurrentTime} currentTime={currentTime} mode={mode} />
         <div style={p4}>
           {(timeStamp && showCommentForm) &&
             <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
