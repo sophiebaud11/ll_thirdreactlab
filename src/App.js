@@ -6,6 +6,7 @@ import Roll from './Roll'
 import Panel from './Panel'
 import Firebase from 'firebase'
 import Comment from './Comment.js'
+import { config } from './config.js'
 
 import { p1, p2, p3, p4, r2 } from './styles.js'
 
@@ -22,20 +23,7 @@ export default function App() {
   const [matchComments, setMatch] = useState([])
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
-  const [collectionId, setCollectionId] = useState("")
-  const [error, setError] = useState()
-  const indexToUpdate = useRef(null)
 
-
-  const config = {
-    apiKey: "AIzaSyDcHFo130e0QqbOEa6wgcZwws858Xe326c",
-    authDomain: "ll-thirdreactlab.firebaseapp.com",
-    databaseURL: "https://ll-thirdreactlab.firebaseio.com",
-    projectId: "ll-thirdreactlab",
-    storageBucket: "ll-thirdreactlab.appspot.com",
-    messagingSenderId: "465521793807",
-    appId: "1:465521793807:web:74a2ed70d2b5a614fb3c7a"
-  }
   const getUserData = () => {
     let ref = Firebase.database().ref('/')
     ref.on('value', snapshot => {
@@ -45,6 +33,7 @@ export default function App() {
         setArray(dbState)
       }
     })
+    console.log('DATA RETRIEVED')
   }
   useEffect(() => {
       Firebase.initializeApp(config)
@@ -54,6 +43,8 @@ export default function App() {
   useEffect(() => {
     console.log(commentArray)
     const writeUserData = () => {
+      // make a new variable - stick comment array into an object and send that object to the db
+      // the key of this object is the numeric date, then video id, then comment data
       Firebase.database().ref('/').set(commentArray)
       console.log('DATA SAVED')
     }
