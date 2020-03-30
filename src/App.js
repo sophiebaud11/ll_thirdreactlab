@@ -48,16 +48,17 @@ export default function App() {
     console.log(sessionId)
 
     const writeUserData = () => {
-      if (sessionId.current !== null) {
-        let update = {[sessionId.current]: {
+      var newData = {[sessionId.current]: {
           videoId: idValue,
           comments: commentArray
         }}
-        setData(update)
-      }
+      setData(newData)
+      var newKey = Firebase.database().ref().child('comments').push().key
+      var updates ={}
+      updates['/comments/' + newKey] = newData
       // make a new variable - stick comment array into an object and send that object to the db
       // the key of this object is the numeric date, then video id, then comment data
-      Firebase.database().ref('/').set(data)
+      Firebase.database().ref('/').update(updates)
       console.log('DATA SAVED')
     }
     if (saved) {
