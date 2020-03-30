@@ -1,21 +1,57 @@
-import React from 'react'
-// import {  } from './styles.js'
+import React, { useState, useEffect } from 'react'
+import { buttonStyle, commentStyle, titleStyle, showButton } from './styles.js'
+import commentData from './dataModel.js'
 
-export default function Roll({ rollComments, setCommentRoll }) {
-  console.log(rollComments[0])
-  const rollCommentsList = rollComments ? <div>
-    {rollComments.map((item,i) => <p style={{marginTop: "3px"}} key={i}>{rollComments[i].text + " (comment made at " + rollComments[i].time + ")"}</p>)}
-  </div> : <p>No comments yet!</p>
+export default function Roll({ matchComments, currentTime, playing, player, setMode, setMatch, commentArray, rollComments, mode }) {
+  //query getcurrenttime to check if things match
+  useEffect(() => {
+    for (const comment in commentData) {
+      if (currentTime + .1 >= comment && currentTime - .1 <= comment) {
+        if (matchComments.length > 0) {
+          console.log("first if")
+          if (comment.text === matchComments[matchComments.length - 1].text) {
+            break
+          }
+        }
+        console.log("match!")
+        setMatch(matchComments => [...matchComments, {time: comment, text: commentData[comment]}])
+        }
+      }
+    }, [currentTime, commentData])
 
-// build a stopwatch that starts/stops when someone ihts play/Pause
-// this triggers when the comments appear
-// object has to be mapped like in panel.js
+  function findMatch() {
+    console.log("searching for match")
+    for (var i = 0; i < commentArray.length; i++) {
+        commentData[rollComments[i].time] = rollComments[i].text
+      }
+  }
+  function showSaved () {
+    setMode("showComments")
+    console.log("showing saved")
+    player.current.setCurrentTime(0).then(function(seconds) {
+      player.current.play()
+    })
+    findMatch()
+  }
+  const items = matchComments.map( (comment, i) => {
+    return <p key={i}>{comment.text}</p>
+  })
 
-  return (
-    <>
+    return (
       <div>
-        {rollCommentsList}
+        <div style={showButton}>
+          <button style={buttonStyle} onClick={showSaved}>Show Saved Comments</button>
+        </div>
+          { mode === "showComments" && matchComments &&
+            <>
+            <div style={titleStyle}>
+              Comments:
+            </div>
+            <div style={commentStyle}>
+              {items}
+            </div>
+            </>
+          }
       </div>
-    </>
   )
 }

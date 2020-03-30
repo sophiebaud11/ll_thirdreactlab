@@ -3,6 +3,8 @@ import { buttonStyle, inputStyle} from './styles.js'
 
 export default function Comment (props) {
   const { timeStamp, onCommentSubmit, commentValue, setComment } = props
+  
+
   return (
     <>
     <div style={{color: "#142952"}}>

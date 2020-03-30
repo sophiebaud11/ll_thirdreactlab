@@ -1,77 +1,81 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import like from './likeshadow.png'
 import Player from '@vimeo/player'
+import Roll from './Roll.js'
 import commentData from './dataModel.js'
-import { buttonStyle, p4 } from './styles.js'
+import { buttonStyle, p4, r3 } from './styles.js'
 
 export default function Play (props) {
-  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setShowRoll } = props
+  const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setCurrentTime, currentTime, mode } = props
   const buttonText = playing ? 'Pause' : 'Play'
+  const [videoDuration, setDuration] = useState(0)
 
-  function commentButton() {
-    getTimestamp()
-    setCommentForm(true)
-  }
-  function saveComment() {
-      setCommentRoll(commentArray)
-// save comment array to a new state variable - log that new state variable to see if how it's structured
-// have a roll past comments button that rolls thru that data as the video plays, showing comments in sync
-  }
-  function showRoll() {
-    setShowRoll(true)
-    console.log(rollComments)
-    for (var i = 0; i < commentArray.length; i++) {
-      commentData[rollComments[i].time] = rollComments[i].text
-    }
-    console.log(commentData)
-    player.current.setCurrentTime(0).then(function(seconds) {
-      player.current.play()
-    }).catch(function(error) {
-        switch (error.name) {
-          case 'RangeError':
-              // The time is less than 0 or greater than the video's duration
-              break;
-
-          default:
-              // Some other error occurred
-              break;
-        }
-      })
-
-  }
-  function hideRoll() {
-    setShowRoll(false)
-  }
-  const playPause = () => {
-    switch (playing) {
-      case false:
-        player.current.play()
-        setPlaying(true)
-        break
-      case true:
-        player.current.pause()
-        setPlaying(false)
-        break
-      default:
-        break
-    }
-  }
   const getTimestamp = () => {
     player.current.getCurrentTime().then(function(seconds) {
       setTimeStamp(seconds)
     })
   }
+
+  var stopwatchInterval
+  function commentButton() {
+    getTimestamp()
+    setCommentForm(true)
+  }
+  function saveComment() {
+    setCommentRoll(commentArray)
+  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      player.current.getCurrentTime().then( secs => setCurrentTime(secs))
+    }, 200)
+    if (!playing) {
+      console.log("pause")
+      clearInterval(timer)
+    }
+    return () => clearInterval(timer)
+  }, [currentTime, player, playing])
+
+  const playPause = (mode) => {
+    if (mode === "showComments") {
+      console.log("showComments")
+      switch (playing) {
+        case false:
+          player.current.play()
+          setPlaying(true)
+          break
+        case true:
+          player.current.pause()
+          setPlaying(false)
+          break
+        default:
+          break
+      }
+    }
+    else if (mode === 'initial') {
+        console.log("initial")
+        setPlaying(false)
+        switch (playing) {
+          case false:
+            player.current.play()
+            setPlaying(true)
+            break
+          case true:
+            player.current.pause()
+            setPlaying(false)
+            break
+          default:
+            break
+      }
+    }
+  }
   return (
     <>
       <div style={p4}>
-        <button style={buttonStyle} onClick={playPause}>{buttonText}</button>
+        <button style={buttonStyle} onClick={() => playPause(mode)}>{buttonText}</button>
         <button style={buttonStyle} onClick={() => addLike()}><img src={like} width="20px" alt="like"/>Like!</button>
         <button style={buttonStyle} onClick={commentButton}>Leave a Comment</button>
         <button style={buttonStyle} onClick={saveComment}>Save Comments</button>
-        <button style={buttonStyle} onClick={showRoll}>Show Saved Comments</button>
-        <button style={buttonStyle} onClick={hideRoll}>Hide Saved Comments</button>
       </div>
     </>
 
-  )
-}
+)}

@@ -10,7 +10,6 @@ export const p2 = {
   flexDirection: "column",
   justifyContent: "left",
   fontFamily: "'Roboto Slab', serif",
-
 }
 export const r2 = {
   display: "flex",
@@ -72,10 +71,20 @@ export const panelStyle = {
   marginTop: "1em"
 }
 export const videoStyle = {
-  marginTop: "20px"
+  marginTop: "20px",
 }
 export const titleStyle = {
   color: "#98b2e6",
   fontSize: "1.17em",
   textShadow: "1px 1px #142952",
+}
+export const showButton = {
+}
+export const videoTitle = {
+  fontFamily: "'Montserrat', sans-serif",
+  marginTop: "15px",
+  color: "black",
+  textAlign: "center",
+  fontWeight: "bold",
+  fontSize: "1.15em",
 }
