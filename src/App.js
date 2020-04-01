@@ -23,42 +23,74 @@ export default function App() {
   const [matchComments, setMatch] = useState([])
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
+  const [saved, setSaved] = useState(false)
+  const sessionId = useRef()
+  const [data, setData] = useState([])
+  const [username, setUser] = useState('')
 
-  const getUserData = () => {
-    let ref = Firebase.database().ref('/')
-    ref.on('value', snapshot => {
-      const dbState = snapshot.val()
-      console.log(`db snap: ${dbState}`)
-      if (dbState) {
-        setArray(dbState)
-      }
-    })
-    console.log('DATA RETRIEVED')
-  }
+
   useEffect(() => {
       Firebase.initializeApp(config)
-      getUserData()
     }, [])
 
-  useEffect(() => {
-    console.log(commentArray)
-    const writeUserData = () => {
-      // make a new variable - stick comment array into an object and send that object to the db
-      // the key of this object is the numeric date, then video id, then comment data
-      Firebase.database().ref('/').set(commentArray)
-      console.log('DATA SAVED')
-    }
-    if (commentArray.length > 0) {
-      writeUserData()
-    }
-  }, [commentArray])
+  // useEffect(() => {
+  //   console.log(commentArray)
+  //   console.log(sessionId)
+  //
+  //   const writeUserData = () => {
+  //     var newKey = Firebase.database().ref().child('comments').push().key
+  //     var updates = {}
+  //     updates['/comments/' + newKey] = data
+  //     Firebase.database().ref('/').update(updates)
+  //     console.log('DATA SAVED')
+  //   }
+  //   if (saved) {
+  //     writeUserData()
+  //   }
+  // }, [saved, commentArray, idValue, sessionId])
 
-
-  function newVideo(searchValue) {
-    setId(searchValue)
+  function writeId (idValue) {
+    Firebase.database().ref('/').update(['/videos/' + idValue])
+    console.log('newId written')
+  }
+  function newVideo(formState) {
+    console.log(formState.video)
+    console.log(formState.user)
+    setId(formState.video)
+    setUser(formState.user)
     setComment('')
     setArray([])
     setLike(0)
+    // check database for if this video id is already a key; if it is, update that with the new user & their comments, if not, add the video id as a new key to the database
+    let ref = Firebase.database().ref('/')
+    ref.on('value', function(snapshot) {
+      const dbState =  snapshot.val()
+      console.log('db snap:', {dbState})
+      var i
+      if(dbState) {for (i = 0; i < dbState.length; i++) {
+        if (dbState[i] === idValue) {
+          return
+        }
+        else {
+          writeId(idValue)
+        }
+      }
+    }
+    else {
+
+      var makeChild = Firebase.database().ref('videos')
+      var dbNew = {
+        videoId: idValue
+      }
+      makeChild.push(dbNew)
+    }
+  })
+    // sessionId.current = new Date().toString()
+    // var newData = {[sessionId.current]: {
+    //     videoId: idValue,
+    //     comments: commentArray
+    //   }}
+    // setData(newData)
   }
   function addLike() {
     setLike(likeValue + 1)
@@ -68,6 +100,13 @@ export default function App() {
     const text = commentValue
     const uid = new Date().getTime().toString()
     setArray([...commentArray, { time: time, text: text, uid: uid }])
+    console.log("comment submitted")
+    //update db with user object & comment
+    let newComment = {
+        user: username,
+        comment: commentArray
+    }
+    Firebase.database().ref('/video' + idValue).set(newComment)
     setComment('')
     setCommentForm(false)
   }
