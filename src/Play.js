@@ -22,6 +22,7 @@ export default function Play (props) {
     setCommentForm(true)
   }
   function saveComment() {
+    console.log(commentArray)
     // have something check for if there is a comment roll: if not throw an error
     setCommentRoll(commentArray)
   }

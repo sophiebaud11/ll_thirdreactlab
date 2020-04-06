@@ -4,6 +4,7 @@ import commentData from './dataModel.js'
 
 export default function Roll({ matchComments, currentTime, playing, player, setMode, setMatch, commentArray, rollComments, mode }) {
   //query getcurrenttime to check if things match
+  // console.log(commentArray)
   useEffect(() => {
     for (const comment in commentData) {
       if (currentTime + .1 >= comment && currentTime - .1 <= comment) {
@@ -17,16 +18,19 @@ export default function Roll({ matchComments, currentTime, playing, player, setM
         setMatch(matchComments => [...matchComments, {time: comment, text: commentData[comment]}])
         }
       }
-    }, [currentTime, commentData])
+    }, [currentTime])
 
   function findMatch() {
     console.log("searching for match")
     for (var i = 0; i < commentArray.length; i++) {
         commentData[rollComments[i].time] = rollComments[i].text
       }
+    console.log(commentData)
   }
   function showSaved () {
     setMode("showComments")
+    let commentData = {}
+    setMatch([])
     console.log("showing saved")
     player.current.setCurrentTime(0).then(function(seconds) {
       player.current.play()
