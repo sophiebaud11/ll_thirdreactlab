@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { buttonStyle, commentStyle, titleStyle, showButton } from './styles.js'
 import commentData from './dataModel.js'
 
+
 export default function Roll({ matchComments, currentTime, playing, player, setMode, setMatch, commentArray, rollComments, mode }) {
+
   //query getcurrenttime to check if things match
   // console.log(commentArray)
   useEffect(() => {

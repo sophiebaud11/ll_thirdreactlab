@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import Video from './Video'
 import Play from './Play'
 import Search from './Search'
@@ -7,9 +7,13 @@ import Panel from './Panel'
 import Firebase from 'firebase'
 import Comment from './Comment.js'
 import commentData from './dataModel.js'
+import { updateSessionData, SessionData } from './context.js'
 import { config } from './config.js'
 
 import { p1, p2, p3, p4, r2 } from './styles.js'
+
+
+
 
 export default function App() {
   const [idValue, setId] = useState('')
@@ -28,6 +32,7 @@ export default function App() {
   const [sessionId, setSessionId] = useState('')
   const [data, setData] = useState([])
   const [username, setUser] = useState('')
+  const updateSession = useContext(updateSessionData)
 
 
   useEffect(() => {
@@ -51,48 +56,35 @@ export default function App() {
   // }, [saved, commentArray, idValue, sessionId])
 
   function newVideo(formState) {
-    console.log(formState.video)
-    console.log(formState.user)
-    const videoId = formState.video
+    updateSession({type: 'setSessionId'})
+    updateSession({type: 'setUsername', name: formState.user})
+    updateSession({type: 'setVideoID', name: formState.video})
+  //   console.log(formState.video)
+  //   console.log(formState.user)
+  //   const videoId = formState.video
     setId(formState.video)
-    setUser(formState.user)
-    setComment('')
-    setArray([])
-    setLike(0)
-    setMatch([])
-    let commentData = {}
-    // check database for if this video id is already a key; if it is, update that with the new user & their comments, if not, add the video id as a new key to the database
-    Firebase.database().ref().once('value').then(function(snapshot) {
-        const dbState =  snapshot.val()
-        console.log('db snap:', {dbState})
-        return dbState
-    })
-    const newSessionKey = Firebase.database().ref().child('videos').push().key
-    console.log(videoId)
-    console.log("doesn't include")
-    var updates = {}
-    updates['/videos/' + videoId + '/'] = newSessionKey
-    Firebase.database().ref().update(updates)
-    setSessionId(newSessionKey)
+  //   setUser(formState.user)
+  //   setComment('')
+  //   setArray([])
+  //   setLike(0)
+  //   setMatch([])
+  //   let commentData = {}
+  //   // check database for if this video id is already a key; if it is, update that with the new user & their comments, if not, add the video id as a new key to the database
+  //   Firebase.database().ref().once('value').then(function(snapshot) {
+  //       const dbState =  snapshot.val()
+  //       console.log('db snap:', {dbState})
+  //       return dbState
+  //   })
+  //   const newSessionKey = Firebase.database().ref().child('videos').push().key
+  //   console.log(videoId)
+  //   console.log("doesn't include")
+  //   var updates = {}
+  //   updates['/videos/' + videoId + '/'] = newSessionKey
+  //   Firebase.database().ref().update(updates)
+  //   setSessionId(newSessionKey)
   }
   function addLike() {
     setLike(likeValue + 1)
-  }
-  function onCommentSubmit (timeStamp) {
-    const time = timeStamp
-    const text = commentValue
-    const uid = new Date().getTime().toString()
-    setArray([...commentArray, { time: time, text: text, uid: uid }])
-    console.log("comment submitted")
-    //update db with user object & comment
-    let newComment = {
-        user: username,
-        comment: commentArray
-    }
-    const sessionRef = Firebase.database().ref('/session')
-    sessionRef.child(sessionId).update(newComment)
-    setComment('')
-    setCommentForm(false)
   }
 
   if (idValue) {
@@ -107,7 +99,7 @@ export default function App() {
         <Play playing={playing} setPlaying={setPlaying} player={player} setTimeStamp={setTimeStamp} setCommentForm={setCommentForm} addLike={addLike} commentArray={commentArray} setCommentRoll={setCommentRoll} rollComments={rollComments} setCurrentTime={setCurrentTime} currentTime={currentTime} mode={mode} />
         <div style={p4}>
           {(timeStamp && showCommentForm) &&
-            <Comment timeStamp={timeStamp} onCommentSubmit={onCommentSubmit} commentValue={commentValue} setComment={setComment}/>
+            <Comment timeStamp={timeStamp} commentValue={commentValue} setComment={setComment} commentArray={commentArray} setArray={setArray} setCommentForm={setCommentForm} />
           }
         </div>
         <Panel likeValue={likeValue} commentArray={commentArray}/>

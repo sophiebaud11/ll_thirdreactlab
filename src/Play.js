@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useReducer } from 'react'
 import like from './likeshadow.png'
 import Player from '@vimeo/player'
 import Roll from './Roll.js'
 import commentData from './dataModel.js'
 import { buttonStyle, p4, r3 } from './styles.js'
 
+
+
 export default function Play (props) {
   const { playing, setPlaying, player, setTimeStamp, setCommentForm, addLike, commentArray, setCommentRoll, rollComments, setCurrentTime, currentTime, mode } = props
   const buttonText = playing ? 'Pause' : 'Play'
   const [videoDuration, setDuration] = useState(0)
-
   const getTimestamp = () => {
     player.current.getCurrentTime().then(function(seconds) {
       setTimeStamp(seconds)
