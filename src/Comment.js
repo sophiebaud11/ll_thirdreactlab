@@ -1,6 +1,6 @@
 import React, { useContext, useReducer } from 'react'
 import { buttonStyle, inputStyle} from './styles.js'
-import { updateSessionData, SessionData } from './context.js'
+import { updateSessionData, SessionData } from './Context.js'
 
 const commentReducer = (markers, action) => {
   switch (action.type) {

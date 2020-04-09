@@ -5,7 +5,7 @@ import { dataReducer } from './reducers.js'
 export const updateSessionData = React.createContext()
 export const SessionData = React.createContext()
 
-export default function DataContext() {
+export default function Context() {
   const initialData =
   {
     sessionID: '',

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import Context from './context'
+import Context from './Context'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Context />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

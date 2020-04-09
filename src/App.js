@@ -7,7 +7,7 @@ import Panel from './Panel'
 import Firebase from 'firebase'
 import Comment from './Comment.js'
 import commentData from './dataModel.js'
-import { updateSessionData, SessionData } from './context.js'
+import { updateSessionData, SessionData } from './Context.js'
 import { config } from './config.js'
 
 import { p1, p2, p3, p4, r2 } from './styles.js'
