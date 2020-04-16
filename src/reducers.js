@@ -4,22 +4,34 @@ import Firebase from 'firebase'
 export function dataReducer(data, action) {
   switch (action.type) {
     case 'setVideoID':
-      Firebase.database().ref(`videos/${action.id}`).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
+      Firebase.database().ref(`videos`).once('value').then(function(snapshot) {
+        if (snapshot.exists() == false) {
+          console.log('hello')
+          Firebase.database().ref(`videos/`).set(`${action.id}`)
           const updates = {
-            [`videos/${action.id}/sessions/${data.sessionID}`]: true,
+            [`videos/${action.id}`]: {sessions: {[data.sessionID]: true}},
             [`sessions/${data.sessionID}/video`]: action.id
           }
           Firebase.database().ref().update(updates)
           return
         }
-        const updates = {
-          [`videos/${action.id}`]: {sessions: {[data.sessionID]: true}},
-          [`sessions/${data.sessionID}/video`]: action.id
+        Firebase.database().ref(`videos/${action.id}`).once('value').then(function(snapshot) {
+            if (snapshot.exists()) {
+              const updates = {
+                [`videos/${action.id}/sessions/${data.sessionID}`]: true,
+                [`sessions/${data.sessionID}/video`]: action.id
+              }
+              Firebase.database().ref().update(updates)
+              return
+            }
+            const updates = {
+              [`videos/${action.id}`]: {sessions: {[data.sessionID]: true}},
+              [`sessions/${data.sessionID}/video`]: action.id
+            }
+            Firebase.database().ref().update(updates)
+          })
+          return {...data, video: action.id}
         }
-        Firebase.database().ref().update(updates)
-      })
-      return {...data, video: action.id}
     case 'setUsername':
       Firebase.database().ref(`users/${action.name}`).once('value').then(function(snapshot) {
         if (snapshot.exists()) {

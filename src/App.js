@@ -9,6 +9,7 @@ import Comment from './Comment.js'
 import commentData from './dataModel.js'
 import { updateSessionData, SessionData } from './Context.js'
 import { config } from './config.js'
+import Context from './Context.js'
 
 import { p1, p2, p3, p4, r2 } from './styles.js'
 
@@ -29,7 +30,7 @@ export default function App() {
   const [mode, setMode] = useState("initial")
   const [currentTime, setCurrentTime] = useState(0)
   const [saved, setSaved] = useState(false)
-  const [sessionId, setSessionId] = useState('')
+  const [sessionID, setSessionID] = useState('')
   const [data, setData] = useState([])
   const [username, setUser] = useState('')
   const updateSession = useContext(updateSessionData)
@@ -56,7 +57,7 @@ export default function App() {
   // }, [saved, commentArray, idValue, sessionId])
 
   function newVideo(formState) {
-    updateSession({type: 'setSessionId'})
+    updateSession({type: 'setSessionID'})
     updateSession({type: 'setUsername', name: formState.user})
     updateSession({type: 'setVideoID', name: formState.video})
   //   console.log(formState.video)

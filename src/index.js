@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import Context from './Context'
+import Context from './Context.js'
 
 ReactDOM.render(<Context />, document.getElementById('root'));
 
