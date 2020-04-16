@@ -40,49 +40,11 @@ export default function App() {
       Firebase.initializeApp(config)
     }, [])
 
-  // useEffect(() => {
-  //   console.log(commentArray)
-  //   console.log(sessionId)
-  //
-  //   const writeUserData = () => {
-  //     var newKey = Firebase.database().ref().child('comments').push().key
-  //     var updates = {}
-  //     updates['/comments/' + newKey] = data
-  //     Firebase.database().ref('/').update(updates)
-  //     console.log('DATA SAVED')
-  //   }
-  //   if (saved) {
-  //     writeUserData()
-  //   }
-  // }, [saved, commentArray, idValue, sessionId])
-
   function newVideo(formState) {
     updateSession({type: 'setSessionID'})
     updateSession({type: 'setUsername', name: formState.user})
-    updateSession({type: 'setVideoID', name: formState.video})
-  //   console.log(formState.video)
-  //   console.log(formState.user)
-  //   const videoId = formState.video
+    updateSession({type: 'setVideoID', id: formState.video})
     setId(formState.video)
-  //   setUser(formState.user)
-  //   setComment('')
-  //   setArray([])
-  //   setLike(0)
-  //   setMatch([])
-  //   let commentData = {}
-  //   // check database for if this video id is already a key; if it is, update that with the new user & their comments, if not, add the video id as a new key to the database
-  //   Firebase.database().ref().once('value').then(function(snapshot) {
-  //       const dbState =  snapshot.val()
-  //       console.log('db snap:', {dbState})
-  //       return dbState
-  //   })
-  //   const newSessionKey = Firebase.database().ref().child('videos').push().key
-  //   console.log(videoId)
-  //   console.log("doesn't include")
-  //   var updates = {}
-  //   updates['/videos/' + videoId + '/'] = newSessionKey
-  //   Firebase.database().ref().update(updates)
-  //   setSessionId(newSessionKey)
   }
   function addLike() {
     setLike(likeValue + 1)

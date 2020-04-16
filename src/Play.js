@@ -24,7 +24,6 @@ export default function Play (props) {
   }
   function saveComment() {
     console.log(commentArray)
-    // have something check for if there is a comment roll: if not throw an error
     setCommentRoll(commentArray)
   }
   useEffect(() => {
