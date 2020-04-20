@@ -15,7 +15,6 @@ import { p1, p2, p3, p4, r2 } from './styles.js'
 
 
 
-
 export default function App() {
   const [idValue, setId] = useState('')
   const [commentValue, setComment] = useState('')
